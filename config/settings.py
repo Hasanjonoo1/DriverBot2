@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from dotenv import load_dotenv
 import os
 
@@ -11,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatullayev.uz']
 
 # BOT configuration
 BOT_HOST = os.getenv('BOT_HOST')
@@ -70,6 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
