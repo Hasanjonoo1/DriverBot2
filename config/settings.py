@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatullayev.uz']
+ALLOWED_HOSTS = ['3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatullayev.uz']
 
 # BOT configuration
 BOT_HOST = os.getenv('BOT_HOST')
