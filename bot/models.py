@@ -1,4 +1,7 @@
+from datetime import datetime, time
+
 from django.db import models
+from django.utils.timezone import make_aware, now
 
 
 class OrderStatus(models.TextChoices):
@@ -76,6 +79,20 @@ class Order(models.Model):
             return await cls.objects.aget(id=order_id)
         except:
             return None
+
+    @classmethod
+    async def check_limit(cls, direction: str, d_chat_id: int):
+        """Bugun bir yo'nalish va bir haydovchiga tegishli buyurtmalar sonini hisoblash"""
+        today_start = make_aware(datetime.combine(now().date(), time.min))
+        today_end = make_aware(datetime.combine(now().date(), time.max))
+
+        count = await cls.objects.filter(
+            d_id=d_chat_id,
+            c_direction=direction,
+            created_at__range=(today_start, today_end),
+        ).acount()
+
+        return count
 
 
 class OrderHistory(models.Model):

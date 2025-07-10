@@ -38,6 +38,8 @@ async def take_order(callback: CallbackQuery, bot: Bot):
         return
 
     if order.status == OrderStatus.PROGRESS:
+        count = await Order.check_limit(order.c_direction, driver.chat_id)
+        print(count)
         order.d_name = driver.full_name
         order.d_phone = driver.phone
         order.d_id = driver.chat_id
