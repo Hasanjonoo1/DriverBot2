@@ -57,7 +57,7 @@ class Order(models.Model):
     c_chat_id = models.BigIntegerField("Mijoz Telegram ID")
     c_name = models.CharField("Mijoz ismi", max_length=100)
     c_username = models.CharField("Mijoz username", max_length=100, null=True, blank=True)
-    c_count = models.IntegerField("Yo‘lovchilar soni", null=True, blank=True)
+    c_count = models.IntegerField("Yo‘lovchilar soni", null=True, blank=True, default=0)
     c_phone = models.CharField("Mijoz telefoni", max_length=20, null=True, blank=True)
     c_direction = models.CharField("Yo'nalishi", max_length=255, null=True, blank=True)
 
@@ -82,7 +82,6 @@ class Order(models.Model):
 
     @classmethod
     async def check_limit(cls, direction: str, d_chat_id: int):
-        """Bugun bir yo'nalish va bir haydovchiga tegishli buyurtmalar sonini hisoblash"""
         today_start = make_aware(datetime.combine(now().date(), time.min))
         today_end = make_aware(datetime.combine(now().date(), time.max))
 

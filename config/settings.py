@@ -12,13 +12,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatullayev.uz']
+ALLOWED_HOSTS = ['*', '3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatullayev.uz']
 
 # BOT configuration
 BOT_HOST = os.getenv('BOT_HOST')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 BOT_WEBHOOK_URL = f"{BOT_HOST}/bot/webhook/{BOT_TOKEN.split(':', maxsplit=1)[0]}/updates"
-MOYSKLAD_TOKEN = os.getenv("MOYSKLAD_TOKEN")
 
 
 # Application definition

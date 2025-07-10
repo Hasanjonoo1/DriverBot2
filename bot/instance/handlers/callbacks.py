@@ -39,7 +39,10 @@ async def take_order(callback: CallbackQuery, bot: Bot):
 
     if order.status == OrderStatus.PROGRESS:
         count = await Order.check_limit(order.c_direction, driver.chat_id)
-        print(count)
+        if order.c_count + count > 4:
+            await callback.answer("❌ Limit to'ldi", show_alert=True)
+            return
+
         order.d_name = driver.full_name
         order.d_phone = driver.phone
         order.d_id = driver.chat_id
@@ -49,11 +52,12 @@ async def take_order(callback: CallbackQuery, bot: Bot):
         await create_order_history(order=order, doer=driver.full_name, status=OrderStatus.CALLING)
         await callback.answer("✅ Buyurtma sizga biriktirildi.", show_alert=True)
 
+        c_count = order.c_count if order.c_count > 0 else "Pochta"
         order_text = (
             f"🚖 *Yangi buyurtma ma'lumotlari:*\n\n"
             f"👤 *Mijoz:* {order.c_name}\n"
             f"📞 *Telefon:* {order.c_phone or 'Nomaʼlum'}\n"
-            f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {order.c_count or 'Nomaʼlum'}\n"
+            f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {c_count or 'Nomaʼlum'}\n"
             f"📍 *Yo‘nalish:* {order.c_direction or 'Ko‘rsatilmagan'}\n"
             f"{f'📬 *Username:* @{order.c_username}' if order.c_username else ''}"
             f"\n\n5 daqiqa ichida mijoz bilan bog'lanib, pastdagi kerakli tugmani bosing"
@@ -77,7 +81,7 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                         f"<b>Yangi buyurtma</b>\n"
                         f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
                         f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
-                        f"👥 Yo‘lovchilar soni: {order.c_count or 'Nomaʼlum'}\n\n"
+                        f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
                         f"🚖 Buyurtmaga qo'ng'iroq qilinmoqda...\n"
                         f"👨‍✈️ Haydovchi: {driver.full_name}\n"
                     ),
@@ -133,6 +137,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
         doer=callback.from_user.full_name,
         status="reject"
     )
+    c_count = order.c_count if order.c_count > 0 else "Pochta"
 
     # Guruhdagi xabarni yangilash
     try:
@@ -143,7 +148,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
             text=(
                 f"<b>Yangi buyurtma</b>\n"
                 f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
-                f"👥 Yo‘lovchilar soni: {order.c_count or 'Nomaʼlum'}\n\n"
+                f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
                 f"Buyurtmani olish uchun tugmani bosing 👇"
             ),
             parse_mode="HTML",
@@ -153,7 +158,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
         order_text = (
             f"🚖 *Yangi buyurtma ma'lumotlari:*\n\n"
             f"👤 *Mijoz:* {order.c_name}\n"
-            f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {order.c_count or 'Nomaʼlum'}\n"
+            f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {c_count or 'Nomaʼlum'}\n"
             f"📍 *Yo‘nalish:* {order.c_direction or 'Ko‘rsatilmagan'}\n"
             f"\n\nBuyurtmani rad etdingiz!"
         )
@@ -204,6 +209,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
         doer=callback.from_user.full_name,
         status="accept"
     )
+    c_count = order.c_count if order.c_count > 0 else "Pochta"
 
     # Guruhdagi xabarni yangilash
     try:
@@ -215,7 +221,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
                 f"<b>Yangi buyurtma</b>\n"
                 f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
                 f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
-                f"👥 Yo‘lovchilar soni: {order.c_count or 'Nomaʼlum'}\n\n"
+                f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
                 f"🚖 Buyurtma olindi\n"
                 f"👨‍✈️ Haydovchi: {driver.full_name}\n"
             ),
@@ -225,7 +231,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
         order_text = (
             f"🚖 *Yangi buyurtma ma'lumotlari:*\n\n"
             f"👤 *Mijoz:* {order.c_name}\n"
-            f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {order.c_count or 'Nomaʼlum'}\n"
+            f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {c_count or 'Nomaʼlum'}\n"
             f"📍 *Yo‘nalish:* {order.c_direction or 'Ko‘rsatilmagan'}\n"
             f"\n\nBuyurtmani qabul qildingiz"
         )
