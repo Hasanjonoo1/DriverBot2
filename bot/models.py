@@ -93,6 +93,10 @@ class Order(models.Model):
 
         return count
 
+    @classmethod
+    async def check_calling(cls, d_chat_id: int):
+        return await cls.objects.filter(d_id=d_chat_id, status=OrderStatus.CALLING).exists()
+
 
 class OrderHistory(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="history")

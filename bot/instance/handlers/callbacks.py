@@ -44,6 +44,10 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                 await callback.answer("❌ Limit to'ldi", show_alert=True)
                 return
 
+            if await Order.check_calling(driver.chat_id):
+                await callback.answer("❌ Sizda yakunlanmagan buyurtma bor", show_alert=True)
+                return
+
             order.d_name = driver.full_name
             order.d_phone = driver.phone
             order.d_id = driver.chat_id
