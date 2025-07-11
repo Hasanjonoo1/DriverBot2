@@ -95,7 +95,7 @@ class Order(models.Model):
 
     @classmethod
     async def check_calling(cls, d_chat_id: int):
-        return await cls.objects.filter(d_id=d_chat_id, status=OrderStatus.CALLING).exists()
+        return await cls.objects.filter(d_id=d_chat_id, status=OrderStatus.CALLING).aexists()
 
 
 class OrderHistory(models.Model):
