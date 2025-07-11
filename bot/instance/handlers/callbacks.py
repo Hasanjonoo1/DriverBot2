@@ -59,7 +59,7 @@ async def take_order(callback: CallbackQuery, bot: Bot):
 
             c_count = order.c_count if order.c_count > 0 else "Pochta"
             order_text = (
-                f"🚖 <b>Yangi buyurtma ma'lumotlari:</b>\n\n"
+                f"🚖 <b>Yangi buyurtma</b>  #{order.pk}\n\n"
                 f"👤 <b>Mijoz:</b> {order.c_name}\n"
                 f"📞 <b>Telefon:</b> {order.c_phone or 'Nomaʼlum'}\n"
                 f"🧑‍🤝‍🧑 <b>Yo‘lovchilar:</b> {c_count or 'Nomaʼlum'}\n"
@@ -83,7 +83,7 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                         chat_id=order.group_chat_id,
                         message_id=order.group_message_id,
                         text=(
-                            f"<b>Yangi buyurtma</b>\n"
+                            f"<b>Yangi buyurtma</b>  #{order.pk}\n"
                             f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
                             f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
                             f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
@@ -143,7 +143,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
             chat_id=order.group_chat_id,
             message_id=order.group_message_id,
             text=(
-                f"<b>Yangi buyurtma</b>\n"
+                f"<b>Yangi buyurtma</b>  #{order.pk}\n"
                 f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
                 f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
                 f"Buyurtmani olish uchun tugmani bosing 👇"
@@ -153,7 +153,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
         )
 
         order_text = (
-            f"🚖 *Yangi buyurtma ma'lumotlari:*\n\n"
+            f"🚖 *Yangi buyurtma:*  #{order.pk}\n\n"
             f"👤 *Mijoz:* {order.c_name}\n"
             f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {c_count or 'Nomaʼlum'}\n"
             f"📍 *Yo‘nalish:* {order.c_direction or 'Ko‘rsatilmagan'}\n"
@@ -215,7 +215,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
             chat_id=order.group_chat_id,
             message_id=order.group_message_id,
             text=(
-                f"<b>Yangi buyurtma</b>\n"
+                f"<b>Yangi buyurtma</b>  #{order.pk}\n"
                 f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
                 f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
                 f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
@@ -226,7 +226,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
         )
 
         order_text = (
-            f"🚖 *Yangi buyurtma ma'lumotlari:*\n\n"
+            f"🚖 *Yangi buyurtma:*  #{order.pk}\n\n"
             f"👤 *Mijoz:* {order.c_name}\n"
             f"🧑‍🤝‍🧑 *Yo‘lovchilar:* {c_count or 'Nomaʼlum'}\n"
             f"📍 *Yo‘nalish:* {order.c_direction or 'Ko‘rsatilmagan'}\n"

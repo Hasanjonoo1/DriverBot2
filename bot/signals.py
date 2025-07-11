@@ -24,7 +24,7 @@ async def send_to_group(order: Order):
     c_count = order.c_count if order.c_count > 0 else "Pochta"
 
     text = (
-        f"📦 <b>Yangi buyurtma</b>\n"
+        f"📦 <b>Yangi buyurtma</b> #{order.pk}\n"
         f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
         f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
         f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
