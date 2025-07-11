@@ -16,14 +16,14 @@ class BotUser(models.Model):
     full_name = models.CharField(max_length=500)
     phone = models.CharField(max_length=20, unique=True, null=True, blank=True)
     cash = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    status  = models.BooleanField(default=True)
+    status  = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.full_name} | {self.cash} so'm"
 
     @classmethod
-    async def new_user(cls, chat_id, full_name, phone=None, cash=0, status=False):
+    async def new_user(cls, chat_id, full_name, phone=None, cash=0, status=True):
         await cls.objects.acreate(
             chat_id=chat_id,
             full_name=full_name,
