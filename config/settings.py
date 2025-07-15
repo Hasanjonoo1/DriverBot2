@@ -190,12 +190,17 @@ UNFOLD = {
             {
                 "title": _("Asosiy"),
                 "separator": True,  # Top border
-                "collapsible": True,  # Collapsible group of links
+                "collapsible": False,  # Collapsible group of links
                 "items": [
                     {
                         "title": _("Buyurtmalar"),
-                        "icon": "person",
+                        "icon": "order_approve",
                         "link": reverse_lazy("admin:bot_order_changelist"),
+                    },
+                    {
+                        "title": _("Shopirlar"),
+                        "icon": "person",
+                        "link": reverse_lazy("admin:bot_botuser_changelist"),
                     }
                 ],
             }

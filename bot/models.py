@@ -55,10 +55,10 @@ class Order(models.Model):
     group_message_id = models.IntegerField("Guruhdagi xabar ID", null=True, blank=True)
 
     c_chat_id = models.BigIntegerField("Mijoz Telegram ID")
-    c_name = models.CharField("Mijoz ismi", max_length=100)
+    c_name = models.CharField("Mijoz ismi", max_length=255)
     c_username = models.CharField("Mijoz username", max_length=100, null=True, blank=True)
     c_count = models.IntegerField("Yo‘lovchilar soni", null=True, blank=True, default=0)
-    c_phone = models.CharField("Mijoz telefoni", max_length=20, null=True, blank=True)
+    c_phone = models.CharField("Mijoz telefoni", max_length=100, null=True, blank=True)
     c_direction = models.CharField("Yo'nalishi", max_length=255, null=True, blank=True)
 
     d_name = models.CharField("Haydovchi ismi", max_length=100, null=True, blank=True)

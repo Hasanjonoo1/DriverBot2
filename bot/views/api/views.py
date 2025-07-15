@@ -12,3 +12,5 @@ class OrderCreateAPIView(APIView):
             order = serializer.save()
             return Response({"message": "Order created", "id": order.id}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
