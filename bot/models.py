@@ -1,5 +1,6 @@
 from datetime import datetime, time
 
+from asgiref.sync import sync_to_async
 from django.db import models
 from django.utils.timezone import make_aware, now
 
@@ -7,17 +8,39 @@ from django.utils.timezone import make_aware, now
 class OrderStatus(models.TextChoices):
     PROGRESS = 'progress', 'Jarayonda'
     CALLING = 'calling', 'Qo‘ng‘iroq qilinmoqda'
-    COMPLETE = 'complete', 'Bajarildi'
-    CANCEL = 'cancel', 'Bekor qilindi'
+    COMPLETE = 'accept', 'Bajarildi'
+    CANCEL = 'reject', 'Bekor qilindi'
 
 
-class BotUser(models.Model):
-    chat_id = models.CharField(max_length=20)
-    full_name = models.CharField(max_length=500)
-    phone = models.CharField(max_length=20, unique=True, null=True, blank=True)
-    cash = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    status  = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
+class DirectionStatus(models.TextChoices):
+    FERGANA_TO_TASHKENT = '🚖 Beshariqdan Toshkentga', "🚖 Beshariqdan Toshkentga"
+    TASHKENT_TO_FERGANA = '🚖 Toshkentdan Beshariqga', "🚖 Toshkentdan Beshariqga"
+
+
+class TicketStatus(models.TextChoices):
+    OPEN = 'open', "Ochiq"
+    FULL = 'full', "To‘lgan"
+    CLOSED = 'closed', "Yopilgan"
+
+
+class Driver(models.Model):
+    chat_id = models.CharField("Chat ID", max_length=20)
+    full_name = models.CharField("To‘liq ism", max_length=500)
+    phone = models.CharField("Telefon raqam", max_length=20, unique=True, null=True, blank=True)
+    cash = models.DecimalField("Balans", max_digits=10, decimal_places=2, default=0)
+    limit_count_per_target = models.IntegerField("Yo‘lovchi limiti", default=4)
+    limit_target_per_24hours = models.IntegerField("Yo'nalish limiti", default=2)
+    status  = models.BooleanField("Faol", default=False)
+    is_blocked  = models.BooleanField("Blok", default=False)
+    blocked_until = models.DateTimeField("Cheklov davomiyligi", null=True, blank=True)
+    created_at = models.DateTimeField("Ro‘yxatdan o‘tgan vaqt", auto_now_add=True, null=True)
+
+    class Meta:
+        verbose_name = "Haydovchi"
+        verbose_name_plural = "Haydovchilar"
+
+    def __str__(self):
+        return f"{self.full_name} | {self.phone}"
 
     def __str__(self):
         return f"{self.full_name} | {self.cash} so'm"
@@ -53,6 +76,8 @@ class PrivateGroup(models.Model):
 class Order(models.Model):
     group_chat_id = models.BigIntegerField("Guruh chat ID", null=True, blank=True)
     group_message_id = models.IntegerField("Guruhdagi xabar ID", null=True, blank=True)
+    user_chat_id = models.BigIntegerField("Foydalanuvchi chat ID", null=True, blank=True)
+    user_message_id = models.IntegerField("Foydalanuvchi xabar ID", null=True, blank=True)
 
     c_chat_id = models.BigIntegerField("Mijoz Telegram ID")
     c_name = models.CharField("Mijoz ismi", max_length=255)
@@ -106,3 +131,65 @@ class OrderHistory(models.Model):
 
     def __str__(self):
         return f"Order #{self.order.id} | User: {self.doer} | Status: {self.status}"
+
+
+class Ticket(models.Model):
+    driver = models.ForeignKey(
+        'Driver',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Haydovchi"
+    )
+    direction = models.CharField(
+        max_length=50,
+        choices=DirectionStatus.choices,
+        verbose_name="Yo‘nalish"
+    )
+    status = models.BooleanField(
+        default=True,
+        verbose_name="Holat"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Yaratilgan vaqti")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Yangilangan vaqti")
+
+    class Meta:
+        verbose_name = "Chiptalar"
+        verbose_name_plural = "Chiptalar ro'yxati"
+
+    def __str__(self):
+        return f"{self.driver} | {self.get_direction_display()} | {self.status} | {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+    @classmethod
+    async def get_active_ticket(cls, chat_id):
+        return await sync_to_async(cls.objects.filter(driver__chat_id=chat_id, status=True).last)()
+
+
+class TicketDetail(models.Model):
+    ticket = models.ForeignKey(
+        'Ticket',
+        on_delete=models.CASCADE,
+        related_name='details',
+        verbose_name="Chipta"
+    )
+    order = models.ForeignKey(
+        'Order',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Buyurtma"
+    )
+    full_name = models.CharField(max_length=255, verbose_name="Yo‘lovchi F.I.Sh.")
+    phone = models.CharField(max_length=255, verbose_name="Telefon raqam")
+    count = models.IntegerField("Yo‘lovchilar soni", null=True, blank=True, default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Qo‘shilgan vaqti")
+
+    class Meta:
+        unique_together = ('ticket', 'order')
+        verbose_name = "Chiptadagi buyurtma"
+        verbose_name_plural = "Chiptadagi buyurtmalar"
+
+    def __str__(self):
+        return f"{self.full_name} | {self.ticket}"

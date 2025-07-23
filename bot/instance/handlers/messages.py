@@ -1,5 +1,9 @@
+from aiogram import Bot
 from aiogram.types import Message, ReplyKeyboardRemove
-from bot.models import BotUser
+
+from bot.instance.handlers import targets
+from bot.models import Driver, Order
+from django.utils import timezone
 
 async def handle_contact(message: Message, bot):
     contact = message.contact
@@ -8,7 +12,7 @@ async def handle_contact(message: Message, bot):
     phone = contact.phone_number
 
     # Foydalanuvchi mavjudligini tekshiramiz
-    is_exists = await BotUser.exists_user(chat_id)
+    is_exists = await Driver.exists_user(chat_id)
 
     if is_exists:
         await message.answer(
@@ -18,7 +22,7 @@ async def handle_contact(message: Message, bot):
         return
 
     # Yangi foydalanuvchini saqlaymiz
-    await BotUser.new_user(
+    await Driver.new_user(
         chat_id=str(chat_id),
         full_name=full_name,
         phone=phone
@@ -28,3 +32,11 @@ async def handle_contact(message: Message, bot):
         "✅ Raqamingiz saqlandi.\n\n/profile - Profile ma'lumotlaringiz",
         reply_markup=ReplyKeyboardRemove()
     )
+
+
+async def select_target(message: Message, bot: Bot):
+    chat_id = str(message.chat.id)
+
+    msg_text = "🧭 Iltimos, yo‘nalishni tanlang."
+
+    await message.answer(msg_text, reply_markup=await targets())

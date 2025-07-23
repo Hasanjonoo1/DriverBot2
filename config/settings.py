@@ -17,6 +17,7 @@ ALLOWED_HOSTS = ['*', '3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatu
 # BOT configuration
 BOT_HOST = os.getenv('BOT_HOST')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+BOT_USERNAME = os.getenv('BOT_USERNAME')
 BOT_WEBHOOK_URL = f"{BOT_HOST}/bot/webhook/{BOT_TOKEN.split(':', maxsplit=1)[0]}/updates"
 
 
@@ -199,7 +200,12 @@ UNFOLD = {
                     {
                         "title": _("Shopirlar"),
                         "icon": "person",
-                        "link": reverse_lazy("admin:bot_botuser_changelist"),
+                        "link": reverse_lazy("admin:bot_driver_changelist"),
+                    },
+{
+                        "title": _("Ticketlar"),
+                        "icon": "confirmation_number",
+                        "link": reverse_lazy("admin:bot_ticket_changelist"),
                     }
                 ],
             }
