@@ -389,7 +389,7 @@ async def ticket_create(callback: CallbackQuery, bot: Bot):
                 f"⏳ Oxirgi yo'nalishingiz: {last_ticket.get_direction_display()}\n"
                 f"🕓 So‘nggi o‘zgarish: {last_ticket.updated_at.strftime('%Y-%m-%d %H:%M')}\n"
                 f"⏱ O‘tgan vaqt: {soat_farqi} soat {daqiqa_farqi} daqiqa\n\n"
-                f"Kamida 5 soat kutishingiz kerak!\n\n"
+                f"Kamida 3 soat kutishingiz kerak!\n\n"
                 f"/ticket - Ma'lumotlarni ko‘rish"
             )
             return
