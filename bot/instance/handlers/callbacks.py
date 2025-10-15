@@ -372,7 +372,7 @@ async def ticket_create(callback: CallbackQuery, bot: Bot):
             return
 
         # Oxirgi yopilgan yoki to'lgan ticket dan 5 soat o'tganmi?
-        five_hours_ago = now() - timedelta(hours=5)
+        five_hours_ago = now() - timedelta(hours=3)
         last_ticket = await Ticket.objects \
             .filter(driver=user) \
             .order_by('-updated_at') \
@@ -382,7 +382,7 @@ async def ticket_create(callback: CallbackQuery, bot: Bot):
             soat_farqi = (now() - last_ticket.updated_at).seconds // 3600
             daqiqa_farqi = ((now() - last_ticket.updated_at).seconds % 3600) // 60
             await callback.answer(
-                "⏳ Oxirgi klientni olganingizdan beri hali 5 soat o'tmagan.",
+                f"⏳ Oxirgi klientni olganingizdan beri hali 3 soat o'tmagan.",
                 show_alert=True
             )
             await callback.message.edit_text(
