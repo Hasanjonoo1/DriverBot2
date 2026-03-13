@@ -12,7 +12,14 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '3.79.114.112', 'www.driver.asatullayev.uz', 'driver.asatullayev.uz']
+ALLOWED_HOSTS = ['driver.taksijon.uz', 'driver.asatullayev.uz']
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://driver.asatullayev.uz",
+    "https://driver.taksijon.uz"
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # BOT configuration
 BOT_HOST = os.getenv('BOT_HOST')
