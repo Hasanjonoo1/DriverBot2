@@ -59,7 +59,8 @@ jobs:
             docker-compose down
             docker-compose up --build -d
             
-            # Migratsiyalarni bajarish
+            # Migratsiyalarni bajarish va Webhookni sozlash
             docker-compose exec -T web python manage.py migrate
+            docker-compose exec -T web python manage.py set_webhook
             
-            echo "✅ Deployment successful with Docker Compose!"
+            echo "✅ Deployment successful! Webhook updated."
