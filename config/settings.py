@@ -10,9 +10,9 @@ load_dotenv(dotenv_path, override=True)
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['driver.taksijon.uz', 'driver.asatullayev.uz', '*']
+ALLOWED_HOSTS = ['driver.taksijon.uz', 'driver.asatullayev.uz', '193.46.243.242', '193.25.5.23', '*']
 
 CSRF_TRUSTED_ORIGINS = [
     "https://driver.asatullayev.uz",
