@@ -67,6 +67,8 @@ async def execute_auto_reject(order_id: int, driver_id: int, driver_name: str):
             
         c_count = order.c_count if order.c_count > 0 else "Pochta"
         
+        history_display = history_text or "\n— Tarix mavjud emas —"
+        
         if hasattr(order, "group_chat_id") and hasattr(order, "group_message_id"):
             await bot.edit_message_text(
                 chat_id=order.group_chat_id,
@@ -76,7 +78,7 @@ async def execute_auto_reject(order_id: int, driver_id: int, driver_name: str):
                     f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
                     f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
                     f"👥 Yo'lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
-                    f"<b>📜 Tarix:</b>{history_text or '\n— Tarix mavjud emas —'}\n\n"
+                    f"<b>📜 Tarix:</b>{history_display}\n\n"
                     f"Buyurtmani olish uchun tugmani bosing 👇"
                 ),
                 parse_mode="HTML",
@@ -212,6 +214,7 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                         history_text += f"\n {n}. {hist.doer} — {action} ({localtime(hist.created_at).strftime('%H:%M:%S')})"
                         n += 1
 
+                    history_display = history_text or "\n— Tarix mavjud emas —"
                     # Yuborilayotgan xabarga qo‘shamiz
                     await callback.bot.edit_message_text(
                         chat_id=order.group_chat_id,
@@ -223,7 +226,7 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                             f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
                             f"🚖 Buyurtmaga qo‘ng‘iroq qilinmoqda...\n"
                             f"👨‍✈️ Haydovchi: {driver.full_name}\n"
-                            f"\n\n<b>📜 Tarix:</b>{history_text or '\n— Tarix mavjud emas —'}"
+                            f"\n\n<b>📜 Tarix:</b>{history_display}"
                         ),
                         parse_mode="html"
                     )
@@ -286,6 +289,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
             history_text += f"\n {n}. {hist.doer} — {action} ({localtime(hist.created_at).strftime('%H:%M:%S')})"
             n += 1
 
+        history_display = history_text or "\n— Tarix mavjud emas —"
         await bot.edit_message_text(
             chat_id=order.group_chat_id,
             message_id=order.group_message_id,
@@ -294,7 +298,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
                 f"📍 Ism: {order.c_name or 'Nomaʼlum'}\n"
                 f"📍 Yo'nalish: {order.c_direction or 'Nomaʼlum'}\n"
                 f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
-                f"<b>📜 Tarix:</b>{history_text or '\n— Tarix mavjud emas —'}\n\n"
+                f"<b>📜 Tarix:</b>{history_display}\n\n"
                 f"Buyurtmani olish uchun tugmani bosing 👇"
             ),
             parse_mode="HTML",
@@ -396,6 +400,8 @@ async def accept(callback: CallbackQuery, bot: Bot):
 
         c_count = order.c_count if order.c_count > 0 else "Pochta"
 
+        history_display = history_text or "\n— Tarix mavjud emas —"
+
         await bot.edit_message_text(
             chat_id=order.group_chat_id,
             message_id=order.group_message_id,
@@ -406,7 +412,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
                 f"👥 Yo‘lovchilar soni: {c_count or 'Nomaʼlum'}\n\n"
                 f"🚖 Buyurtma olindi\n"
                 f"👨‍✈️ Haydovchi: {driver.full_name}\n\n"
-                f"<b>📜 Tarix:</b>{history_text or '\n— Tarix mavjud emas —'}\n\n"
+                f"<b>📜 Tarix:</b>{history_display}\n\n"
             ),
             parse_mode="HTML"
         )
