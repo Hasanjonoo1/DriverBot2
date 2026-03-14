@@ -14,10 +14,15 @@ def send_order_to_group(sender, instance, created, **kwargs):
         async_to_sync(send_to_group)(instance)
 
 
+<<<<<<< HEAD
 from aiogram.client.default import DefaultBotProperties
 
 async def send_to_group(order: Order):
     bot = Bot(token=settings.BOT_TOKEN, default=DefaultBotProperties(protect_content=True))  # ✅ ichkarida yaratamiz
+=======
+async def send_to_group(order: Order):
+    bot = Bot(token=settings.BOT_TOKEN)  # ✅ ichkarida yaratamiz
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 
     group = await PrivateGroup.get_group()
     if not group:

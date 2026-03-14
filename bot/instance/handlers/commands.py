@@ -1,6 +1,9 @@
 from django.utils import timezone  # muhim
+<<<<<<< HEAD
 from django.utils.timezone import localtime
 from asgiref.sync import sync_to_async
+=======
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 from aiogram.types import Message
 from aiogram import Bot
 from aiogram.utils.markdown import hbold
@@ -42,7 +45,11 @@ async def profile(message: Message, bot: Bot):
     try:
         user = await Driver.objects.aget(chat_id=chat_id)
     except Driver.DoesNotExist:
+<<<<<<< HEAD
         await message.answer("🚫 Siz ro'yxatdan o'tmagansiz. Iltimos, avval /start buyrug'ini yuboring.")
+=======
+        await message.answer("🚫 Siz ro‘yxatdan o‘tmagansiz. Iltimos, avval /start buyrug'ini yuboring.")
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
         return
 
     now = timezone.now()
@@ -50,7 +57,11 @@ async def profile(message: Message, bot: Bot):
     # Bloklanganlik statusi aniqlanadi
     if user.is_blocked:
         if user.blocked_until and user.blocked_until > now:
+<<<<<<< HEAD
             blocked_status = f"🚫 Bloklangan (gacha: {localtime(user.blocked_until).strftime('%d.%m.%Y %H:%M')})"
+=======
+            blocked_status = f"🚫 Bloklangan (gacha: {user.blocked_until.strftime('%d.%m.%Y %H:%M')})"
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
         else:
             blocked_status = "⚠️ Bloklangan (muddati tugagan)"
     else:
@@ -65,9 +76,15 @@ async def profile(message: Message, bot: Bot):
         f"{hbold('Holat:')} {'✅ Faol' if user.status else '⛔️ Nofaol'}\n"
         f"{hbold('Bloklanganlik:')} {blocked_status}\n\n"
         f"{hbold('🔢 Limitlar:')}\n"
+<<<<<<< HEAD
         f"• Yo'nalish limiti (24soat ichida): {user.limit_target_per_24hours} ta\n"
         f"• Yo'lovchi limiti (har bir yo'nalish uchun): {user.limit_count_per_target} ta\n"
         f"{hbold('🕒 Roʻyxatdan oʻtgan sana:')} {localtime(user.created_at).strftime('%d.%m.%Y %H:%M')}"
+=======
+        f"• Yo‘nalish limiti (24soat ichida): {user.limit_target_per_24hours} ta\n"
+        f"• Yo'lovchi limiti (har bir yo'nalish uchun): {user.limit_count_per_target} ta\n"
+        f"{hbold('🕒 Ro‘yxatdan o‘tgan sana:')} {user.created_at.strftime('%d.%m.%Y %H:%M')}"
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
     )
 
     await message.answer(
@@ -76,7 +93,11 @@ async def profile(message: Message, bot: Bot):
         reply_markup=target
     )
 
+<<<<<<< HEAD
 async def ticket(message: Message, bot: Bot, show_keyboard: bool = False, clean: bool = False):
+=======
+async def ticket(message: Message, bot: Bot):
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
     if message.chat.type != 'private':
         await message.reply("Bot bu buyruqga faqat shaxsiy xabarlarda ishlaydi")
         return
@@ -85,6 +106,7 @@ async def ticket(message: Message, bot: Bot, show_keyboard: bool = False, clean:
     try:
         user = await Driver.objects.aget(chat_id=chat_id)
     except Driver.DoesNotExist:
+<<<<<<< HEAD
         await message.answer("🚫 Siz ro'yxatdan o'tmagansiz. Iltimos, avval /start buyrug'ini yuboring.")
         return
 
@@ -102,10 +124,17 @@ async def ticket(message: Message, bot: Bot, show_keyboard: bool = False, clean:
                 pass
 
     ticket_obj = await Ticket.objects \
+=======
+        await message.answer("🚫 Siz ro‘yxatdan o‘tmagansiz. Iltimos, avval /start buyrug'ini yuboring.")
+        return
+
+    ticket = await Ticket.objects \
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
         .filter(driver=user) \
         .prefetch_related('details') \
         .alast()
 
+<<<<<<< HEAD
     # 2. Ticket ma'lumotlarini yuborish (BIRINCHI)
     if not ticket_obj:
         msg_ticket = await message.answer(
@@ -156,3 +185,42 @@ async def ticket(message: Message, bot: Bot, show_keyboard: bool = False, clean:
     user.last_ticket_msg_id = msg_ticket.message_id
     user.last_reply_msg_id = msg_reply_id
     await sync_to_async(user.save)()
+=======
+    if not ticket:
+        await message.answer(
+            text="📭 Sizda hozircha ochiq ticket yo‘q.",
+            reply_markup=await close_ticket(ticket_id=None, status=None)
+        )
+        return
+
+    # Yo‘lovchi detallari
+    details = ticket.details.all()
+    total_passengers = sum(d.count or 0 for d in details)
+
+    text = (
+        f"🎫 <b>Ma’lumotlar:</b>\n"
+        f"🛣 <b>Yo‘nalish:</b> {ticket.get_direction_display()}\n"
+        f"📅 <b>Status:</b> {ticket.status}\n"
+        f"👥 <b>Yo‘lovchilar:</b>\n"
+    )
+
+    if details:
+        for i, d in enumerate(details, 1):
+            text += (
+                f"\n<b>{i}.</b> {d.full_name} | {d.phone} | Son: {d.count or 0}"
+            )
+        text += f"\n\n🔢 <b>Jami yo‘lovchilar soni:</b> {total_passengers}"
+    else:
+        text += "\n🚫 Yo‘lovchilar hali qo‘shilmagan."
+
+    # Ticket vaqtlari (ochilgan / yopilgan)
+    text += (
+        f"\n\n🕒 <b>Ochilgan vaqti:</b> {ticket.created_at.strftime('%Y-%m-%d %H:%M')}"
+    )
+    if ticket.updated_at:
+        text += f"\n🕘 <b>Oxirgi o'zgartirish vaqti:</b> {ticket.updated_at.strftime('%Y-%m-%d %H:%M')}"
+
+
+
+    await message.answer(text, reply_markup=await close_ticket(ticket_id=ticket.pk, status=ticket.status), parse_mode="HTML")
+>>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
