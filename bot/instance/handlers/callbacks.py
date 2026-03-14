@@ -5,10 +5,7 @@ from aiogram import Bot
 from aiogram.types import CallbackQuery
 from asgiref.sync import sync_to_async
 from django.utils import timezone
-<<<<<<< HEAD
 from django.utils.timezone import localtime
-=======
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 
 from bot.models import Order, OrderStatus, Driver, OrderHistory, Ticket, TicketStatus, TicketDetail
 
@@ -17,7 +14,6 @@ from bot.models import Order, OrderStatus, Driver, OrderHistory, Ticket, TicketS
 def create_order_history(order, doer, status):
     return OrderHistory.objects.create(order=order, doer=doer, status=status)
 
-<<<<<<< HEAD
 import asyncio
 import threading
 from aiogram.client.default import DefaultBotProperties
@@ -110,8 +106,6 @@ def schedule_auto_reject(order_id, driver_id, driver_name):
     t = threading.Timer(300, run_coro) # 300 soniya = 5 daqiqa
     t.start()
 
-=======
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 
 async def take_order(callback: CallbackQuery, bot: Bot):
     try:
@@ -123,15 +117,11 @@ async def take_order(callback: CallbackQuery, bot: Bot):
             await callback.answer("❌ Sizning hisobingiz faol emas.", show_alert=True)
             return
 
-<<<<<<< HEAD
         # Muzlatish (block) tekshiruvi
         if driver.blocked_until and driver.blocked_until > timezone.now():
             diff = (driver.blocked_until - timezone.now()).seconds
             await callback.answer(f"⏳ Siz vaqtinchalik cheklovdasiz! \nIltimos, {diff} soniyadan keyin urinib ko'ring.", show_alert=True)
             return
-
-=======
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
         order = await Order.get_order(order_id=order_id)
         if not order:
             await callback.answer("❌ Buyurtma topilmadi.", show_alert=True)
@@ -198,7 +188,6 @@ async def take_order(callback: CallbackQuery, bot: Bot):
             )
 
             from bot.instance.handlers import order_private_ik
-<<<<<<< HEAD
             sent_msg = await callback.bot.send_message(
                 chat_id=driver.chat_id,
                 text=order_text,
@@ -211,16 +200,6 @@ async def take_order(callback: CallbackQuery, bot: Bot):
             order.user_chat_id = int(driver.chat_id)
             order.user_message_id = sent_msg.message_id
             await sync_to_async(order.save)()
-
-=======
-            await callback.bot.send_message(
-                chat_id=driver.chat_id,
-                text=order_text,
-                parse_mode="html",
-                reply_markup=await order_private_ik(order.id)
-            )
-
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
             # Guruhdagi xabarni tahrirlash
             if hasattr(order, "group_chat_id") and hasattr(order, "group_message_id"):
                 try:
@@ -230,11 +209,7 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                     n = 1
                     for hist in history_qs:
                         action = dict(OrderStatus.choices).get(hist.status, hist.status)
-<<<<<<< HEAD
                         history_text += f"\n {n}. {hist.doer} — {action} ({localtime(hist.created_at).strftime('%H:%M:%S')})"
-=======
-                        history_text += f"\n {n}. {hist.doer} — {action} ({hist.created_at.strftime('%H:%M:%S')})"
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
                         n += 1
 
                     # Yuborilayotgan xabarga qo‘shamiz
@@ -256,19 +231,10 @@ async def take_order(callback: CallbackQuery, bot: Bot):
                 except Exception as e:
                     print(f"Error take order: {e}")
                     await callback.message.answer("⚠️ Guruhdagi xabarni yangilab bo‘lmadi.")
-<<<<<<< HEAD
-
             # AVTO REJECT TASK CHAQIRISH:
             schedule_auto_reject(order.id, driver.chat_id, driver.full_name)
     except Exception as e:
         print(f"errorrrrrr: {e}")
-
-=======
-    except Exception as e:
-        print(f"errorrrrrr: {e}")
-
-
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 async def reject(callback: CallbackQuery, bot: Bot):
     try:
         order_id = int(callback.data.split(":")[1])
@@ -317,11 +283,7 @@ async def reject(callback: CallbackQuery, bot: Bot):
         n = 1
         for hist in history_qs:
             action = dict(OrderStatus.choices).get(hist.status, hist.status)
-<<<<<<< HEAD
             history_text += f"\n {n}. {hist.doer} — {action} ({localtime(hist.created_at).strftime('%H:%M:%S')})"
-=======
-            history_text += f"\n {n}. {hist.doer} — {action} ({hist.created_at.strftime('%H:%M:%S')})"
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
             n += 1
 
         await bot.edit_message_text(
@@ -430,11 +392,7 @@ async def accept(callback: CallbackQuery, bot: Bot):
         history_text = ""
         for idx, hist in enumerate(history_qs, start=1):
             action = dict(OrderStatus.choices).get(hist.status, hist.status)
-<<<<<<< HEAD
             history_text += f"\n {idx}. {hist.doer} — {action} ({localtime(hist.created_at).strftime('%H:%M:%S')})"
-=======
-            history_text += f"\n {idx}. {hist.doer} — {action} ({hist.created_at.strftime('%H:%M:%S')})"
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 
         c_count = order.c_count if order.c_count > 0 else "Pochta"
 
@@ -532,11 +490,7 @@ async def ticket_create(callback: CallbackQuery, bot: Bot):
             )
             await callback.message.edit_text(
                 f"⏳ Oxirgi yo'nalishingiz: {last_ticket.get_direction_display()}\n"
-<<<<<<< HEAD
                 f"🕓 So‘nggi o‘zgarish: {localtime(last_ticket.updated_at).strftime('%Y-%m-%d %H:%M')}\n"
-=======
-                f"🕓 So‘nggi o‘zgarish: {last_ticket.updated_at.strftime('%Y-%m-%d %H:%M')}\n"
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
                 f"⏱ O‘tgan vaqt: {soat_farqi} soat {daqiqa_farqi} daqiqa\n\n"
                 f"Kamida 3 soat kutishingiz kerak!\n\n"
                 f"/ticket - Ma'lumotlarni ko‘rish"
@@ -572,22 +526,9 @@ async def ticket_create(callback: CallbackQuery, bot: Bot):
         )
         await sync_to_async(ticket.save)()
 
-<<<<<<< HEAD
         from bot.instance.handlers import ticket as ticket_handler
         # Yangilangan ticket handleri o'zi eski xabarlarni o'chirib yangisini yuboradi
         await ticket_handler(callback.message, bot, show_keyboard=True, clean=True)
-
-=======
-        created_time = localtime(ticket.created_at).strftime('%d.%m.%Y %H:%M')
-        direction_display = ticket.get_direction_display()
-
-        await callback.message.edit_text(
-            "✅ Yangi yo'nalish tanlandi.\n\n"
-            f"📍 Yo‘nalish: {direction_display}\n"
-            f"🕒 Yar. vaqti: {created_time}\n\n"
-            "🎫 /ticket — Ma’lumotlarini ko‘rish"
-        )
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
     except Exception as e:
         print(f"Ticket create ERROR: {e}")
         await callback.message.edit_text(
@@ -598,10 +539,5 @@ async def ticket_create(callback: CallbackQuery, bot: Bot):
 
 async def ticket_refresh(callback: CallbackQuery, bot: Bot):
     from bot.instance.handlers import ticket
-<<<<<<< HEAD
     # Yangilangan ticket handleri o'zi eski xabarlarni o'chirib yangisini yuboradi
     await ticket(callback.message, bot, show_keyboard=True, clean=True)
-=======
-    await callback.message.delete()
-    await ticket(callback.message, bot)
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af

@@ -4,11 +4,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from bot.instance.handlers import targets
 from bot.models import Driver, Order
 from django.utils import timezone
-<<<<<<< HEAD
 from django.utils.timezone import localtime
 from asgiref.sync import sync_to_async
-=======
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 
 async def handle_contact(message: Message, bot):
     contact = message.contact
@@ -42,7 +39,6 @@ async def handle_contact(message: Message, bot):
 async def select_target(message: Message, bot: Bot):
     chat_id = str(message.chat.id)
 
-<<<<<<< HEAD
     try:
         user = await Driver.objects.aget(chat_id=chat_id)
     except Driver.DoesNotExist:
@@ -67,8 +63,3 @@ async def select_target(message: Message, bot: Bot):
     user.last_ticket_msg_id = None
     user.last_reply_msg_id = msg_reply.message_id
     await sync_to_async(user.save)()
-=======
-    msg_text = "🧭 Iltimos, yo‘nalishni tanlang."
-
-    await message.answer(msg_text, reply_markup=await targets())
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af

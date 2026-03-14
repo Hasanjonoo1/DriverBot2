@@ -15,11 +15,7 @@ target = ReplyKeyboardMarkup(
         [KeyboardButton(text="🧭 Yo‘nalish tanlash")]
     ],
     resize_keyboard=True,
-<<<<<<< HEAD
     one_time_keyboard=False,
-=======
-    one_time_keyboard=True,
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
     input_field_placeholder="Quyidagi tugmani bosing"
 )
 
@@ -53,8 +49,4 @@ async def get_order_ik(order_id):
 async def close_ticket(ticket_id, status):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔄 Ticketni yangilash", callback_data="ticket_refresh")]
-<<<<<<< HEAD
-=======
-
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
     ])

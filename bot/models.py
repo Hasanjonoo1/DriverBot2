@@ -33,11 +33,8 @@ class Driver(models.Model):
     status  = models.BooleanField("Faol", default=False)
     is_blocked  = models.BooleanField("Blok", default=False)
     blocked_until = models.DateTimeField("Cheklov davomiyligi", null=True, blank=True)
-<<<<<<< HEAD
     last_ticket_msg_id = models.IntegerField("Oxirgi ticket xabari ID", null=True, blank=True)
     last_reply_msg_id = models.IntegerField("Oxirgi reply klaviatura ID", null=True, blank=True)
-=======
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
     created_at = models.DateTimeField("Ro‘yxatdan o‘tgan vaqt", auto_now_add=True, null=True)
 
     class Meta:

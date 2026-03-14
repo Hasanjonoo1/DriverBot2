@@ -20,17 +20,11 @@ webhook_dp.callback_query.register(ticket_create, F.data.startswith("ticket_crea
 webhook_dp.callback_query.register(ticket_refresh, F.data.startswith("ticket_refresh"))
 
 
-<<<<<<< HEAD
 from aiogram.client.default import DefaultBotProperties
 
 async def feed_update(token: str, update: dict):
     try:
         webhook_book = Bot(token=token, default=DefaultBotProperties(protect_content=True))
-=======
-async def feed_update(token: str, update: dict):
-    try:
-        webhook_book = Bot(token=token)
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
         aiogram_update = types.Update(**update)
         await webhook_dp.feed_update(bot=webhook_book, update=aiogram_update)
     finally:

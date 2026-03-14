@@ -12,20 +12,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
 ALLOWED_HOSTS = ['driver.taksijon.uz', 'driver.asatullayev.uz', '*']
 
 CSRF_TRUSTED_ORIGINS = [
     "https://driver.asatullayev.uz",
-    "https://driver.taksijon.uz",
-    "https://boyish-marcus-proportionably.ngrok-free.dev"
-=======
-ALLOWED_HOSTS = ['driver.taksijon.uz', 'driver.asatullayev.uz']
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://driver.asatullayev.uz",
     "https://driver.taksijon.uz"
->>>>>>> ebb601a9a4d30196f2fec478b305776cf8b130af
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
