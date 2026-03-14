@@ -54,9 +54,12 @@ jobs:
           script: |
             cd /var/www/driverbot
             git pull origin ${{ github.ref_name }}
-            source venv/bin/activate
-            pip install -r requirements.txt
-            python manage.py migrate
-            python manage.py collectstatic --noinput
-            sudo systemctl restart driverbot
-            echo "Deployment successful!"
+            
+            # Docker orqali qayta qurish va ishga tushirish
+            docker-compose down
+            docker-compose up --build -d
+            
+            # Migratsiyalarni bajarish
+            docker-compose exec -T web python manage.py migrate
+            
+            echo "✅ Deployment successful with Docker Compose!"

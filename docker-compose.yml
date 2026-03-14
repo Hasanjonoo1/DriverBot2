@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Django Web (Admin panel va API uchun)
+  web:
+    build: .
+    command: gunicorn --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 config.asgi:application
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: always
+
+  # Telegram Bot (Polling rejimi uchun - HTTPS shart emas)
+  bot:
+    build: .
+    command: python bot_polling.py
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - web
+    restart: always
+
+volumes:
+  static_volume:
