@@ -22,10 +22,13 @@ CSRF_TRUSTED_ORIGINS = [
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # BOT configuration
-BOT_HOST = os.getenv('BOT_HOST')
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-BOT_USERNAME = os.getenv('BOT_USERNAME')
-BOT_WEBHOOK_URL = f"{BOT_HOST}/bot/webhook/{BOT_TOKEN.split(':', maxsplit=1)[0]}/updates"
+BOT_HOST = os.getenv('BOT_HOST', 'http://localhost')
+BOT_TOKEN = os.getenv('BOT_TOKEN', '123456:FAKE_TOKEN')
+BOT_USERNAME = os.getenv('BOT_USERNAME', 'bot')
+
+# Safe split if BOT_TOKEN exists
+token_prefix = BOT_TOKEN.split(':', 1)[0] if BOT_TOKEN and ':' in BOT_TOKEN else 'token'
+BOT_WEBHOOK_URL = f"{BOT_HOST}/bot/webhook/{token_prefix}/updates"
 
 
 # Application definition
